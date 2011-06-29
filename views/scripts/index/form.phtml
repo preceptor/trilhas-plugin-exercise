@@ -1,0 +1,69 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'exercise/index', 2) ?>
+</div>
+<div class="exercise">
+    <div class="left">
+        <?php echo $this->form?>
+    </div>
+    <?php if ($this->id):?>
+        <div style="margin-left: 250px" id="question-list">
+            <h3><?php echo $this->translate("Question's list")?></h3>
+            <?php if (count($this->questions)) :?>
+                <?php foreach($this->questions as $question):?>
+                    <div class="question">
+                        <input type="button" value="<?php echo $this->translate('remove')?>" />&nbsp;
+                        <input type="text" size="2" value="<?php echo $question->note?>" />
+                        <input type="hidden" value="<?php echo $question->id?>" />
+                        <?php echo strip_tags($question->description)?>
+                    </div>
+                <?php endforeach;?>
+            <?php else: ?>
+                <p><?php echo $this->translate('there are no records')?></p>
+            <?php endif;?>
+            <br />
+            <input class="add" type="button" value="<?php echo $this->translate('add')?>" />
+        </div>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    (function(){
+        $(".exercise form").submit(function() {
+            var $this = $(this),
+                data = $this.serialize();
+
+            $('.exercise .question input[type=hidden]').each(function(){
+                data += '&question_id[]=' + this.value;
+            });
+            
+            $('.exercise .question input[type=text]').each(function(){
+                data += '&note[]=' + this.value;
+            });
+
+            $.post(this.action, data, function(data) {
+                $this.parents('.content').html(data);
+            });
+
+            return false;
+        });
+
+
+        $('.exercise .question input[type=button]').live('click', function(){
+            var $this = $(this);
+            $this.parent().remove();
+        });
+
+        $('.exercise .add').click(function() {
+            var $this = $(this);
+
+            $.get('exercise/question/select/id/<?php echo $this->id?>/layout/box', function(data){
+                $this.parents('.box').before(data);
+            });
+        });
+
+        $('.date').datepicker().mask('99/99/9999');
+        $('#question-list').sortable();
+        $('.question').css('cursor','move');
+
+        $('input[type=button], input[type=submit]').button();
+    })();
+</script>

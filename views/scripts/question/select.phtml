@@ -1,0 +1,47 @@
+<?php if(count($this->data)):?>
+	<table class="datatable">
+		<tr>
+			<th width="400"><?php echo $this->translate("Description")?></th>
+            <th><?php echo $this->translate("Type")?></th>
+            <th><?php echo $this->translate("Status")?></th>
+            <th></th>
+		</tr>
+		<?php foreach($this->data as $data):?>
+			<tr>
+                <td><?php echo $data->description?></td>
+                <td nowrap="nowrap"><?php echo $this->translate($data->type)?></td>
+                <td><?php echo $this->translate($data->status)?></td>
+                <td class="aright">
+                    <input class="add-question" type="button" value="<?php echo $this->translate('add')?>">&nbsp;
+                    <input type="hidden" value="<?php echo $data->id?>">
+                </td>
+			</tr>
+		<?php endforeach;?>
+	</table>
+    <div id="question-page">
+        <?php echo $this->paginationControl($this->data) ?>
+    </div>
+<?php else:?>
+	<?php echo $this->translate( "there are no records" );?>
+<?php endif;?>
+<script type="text/javascript">
+    $('#question-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+
+    $('.add-question').click(function(){
+        var $this = $(this),
+            html = '<div class="question">'
+                 + '<input type="button" value="<?php echo $this->translate('remove')?>" />&nbsp;\n'
+                 + '<input type="text" value="0" size="2" />&nbsp; '
+                 + '<input type="hidden" value="' + $this.next().val() + '" />'
+                 + $this.parent().prev().prev().prev().text();
+                 + '</div>';
+        $('#question-list p').remove();
+        $('#question-list h3').after(html);
+        $('input[type=button], input[type=submit]').button();
+    });
+
+    $('input[type=button], input[type=submit]').button();
+</script>

@@ -1,0 +1,52 @@
+<?php if ($this->message): ?>
+    <div class="ui-state-highlight ui-corner-all message">
+        <span class="ui-icon ui-icon-info"></span>
+        <ul>
+            <li><?php echo $this->translate($this->message)?></li>
+        </ul>
+    </div>
+<?php else:?>
+<?php $optionTable = new Tri_Db_Table('exercise_option'); ?>
+<div class="reply">
+    <h3><?php echo $this->exercise->name?></h3>
+    <?php if (count($this->questions)): ?>
+        <ol>
+            <?php foreach($this->questions as $question):?>
+                <?php $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id))?>
+                <?php if (count($options)): ?>
+                        <li>
+                            <?php echo $question->description?> |
+                            <strong><?php echo $this->translate('value')?>: <?php echo $question->note?></strong>
+                            <ul>
+                                <?php foreach($options as $option):?>
+                                    <?php
+                                        $className = null;
+                                        foreach($this->answers as $answer) {
+                                            if ($option->id == $answer->exercise_option_id) {
+                                                $className = $option->status;
+                                            }
+                                        }
+                                    ?>
+                                    <li class="<?php echo $className?>">
+                                        &nbsp; <?php echo $option->description?>
+                                        (<?php echo $this->translate($option->status)?>)
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ol>
+        <p><strong><?php echo $this->translate('Note')?>: <?php echo $this->note->note?></strong></p>
+    <?php endif; ?>
+
+     <?php if (count($this->notes)): ?>
+        <h3><?php echo $this->translate('previous')?></h3>
+        <ul>
+            <?php foreach($this->notes as $note):?>
+                <li><?php echo $this->ajax($this->date($note->created, true), 'exercise/reply/view/id/'. $note->id.'/userId/'.$this->userId)?></li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</div>
+<?php endif;?>

@@ -1,0 +1,98 @@
+<div class="right">
+    <?php echo $this->ajax('back', 'exercise/index', 2) ?>
+</div>
+<?php $optionTable = new Tri_Db_Table('exercise_option'); ?>
+<div class="reply">
+    <h3><?php echo $this->exercise->name?></h3>
+    <?php if ($this->exercise->time):?>
+        <p>Tempo restate: <span class="time"><?php echo $this->exercise->time . ':00'; ?></span></p>
+    <?php endif; ?>
+
+    <?php if (count($this->questions)): ?>
+    <form action="exercise/reply/save" method="post">
+        <ol>
+            <?php foreach($this->questions as $question):?>
+                <?php $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id))?>
+                <?php if (count($options)): ?>
+                        <li>
+                            <?php echo $question->description?>
+                            <ul>
+                                <?php foreach($options as $key => $option):?>
+                                    <li>
+                                        <?php if($question->type == "multi-choice"):?>
+                                            <input name="option[<?php echo $option->exercise_question_id?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
+                                        <?php elseif($question->type == "multi-select"):?>
+                                            <input name="option[<?php echo $option->exercise_question_id?>][]" id="option_<?php echo $option->id?>" type="checkbox" value="<?php echo $option->id?>" />
+                                        <?php elseif($question->type == "true-false"):?>
+                                            <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
+                                            <?php echo $this->translate('exercise-T')?> 
+                                            <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" type="radio" value="false" />
+                                            <?php echo $this->translate('exercise-F')?> - 
+                                        <?php endif;?>
+                                        <label for="option_<?php echo $option->id?>">
+                                            <?php echo $option->description?>
+                                        </label>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ol>
+
+        <input type="submit" value="<?php echo $this->translate('send');?>"
+        </form>
+    <?php endif; ?>
+</div>
+<script type="text/javascript">
+    if (rTime) {
+        clearInterval(rTime);
+    }
+    
+	$(".reply form").submit(function() {
+        var $this = $(this);
+		$.post(this.action, $(this).serialize(), function(data){
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+
+    var rTime = setInterval(function(){
+        $.get('index/keep-session');
+    }, 30000);
+
+    <?php if($this->exercise->time):?>
+        var $replyTime = $('.reply .time'), timeId;
+        function countDown() {
+            var parts = $replyTime.text().split(':'), newTime;
+
+            if (parts[1] == '00') {
+                parts[0] = parseInt(parts[0], 10) - 1;
+                parts[1] = '59';
+            } else {
+                parts[1] = parseInt(parts[1], 10) - 1;
+            }
+
+            if (parseInt(parts[1], 10) < 10) {
+                parts[1] = '0' + parts[1];
+            }
+            
+            newTime = parts.join(':');
+
+            if (newTime == '0:00') {
+                $(".reply form").submit();
+            }
+
+            $replyTime.text(newTime);
+            clearTimeout(timeId);
+            timeId = setTimeout(function(){
+                countDown();
+            }, 1000);
+        }
+
+        timeId = setTimeout(function(){
+            countDown();
+        }, 1000);
+    <?php endif?>
+    $('input[type=button], input[type=submit]').button();
+</script>

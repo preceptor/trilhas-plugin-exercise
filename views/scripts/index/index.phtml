@@ -1,0 +1,72 @@
+<div class="right">
+    <?php
+        if($this->isAllowed(array('module' => 'exercise', 'controller' => 'question', 'action' => 'index'))) {
+           echo $this->ajax('question bank', 'exercise/question/index', 2);
+        }
+        if($this->isAllowed("form")) {
+           echo $this->ajax('new', 'exercise/index/form', 2);
+        }
+    ?>
+</div>
+<br /><br />
+<?php if(count($this->data)):?>
+	<table class="datatable">
+		<tr>
+			<th width="250"><?php echo $this->translate("Title")?></th>
+            <th><?php echo $this->translate("Begin")?></th>
+            <th><?php echo $this->translate("End")?></th>
+            <th><?php echo $this->translate("Attemps")?></th>
+            <th><?php echo $this->translate("Time")?></th>
+			<?php if($this->isAllowed("form")): ?>
+				<th></th>
+			<?php endif;?>
+		</tr>
+		<?php foreach($this->data as $data):?>
+			<tr>
+                <td>
+                    <?php 
+                        $confirm = null;
+                        if ($data->status == 'final') {
+                            $confirm = 'Você tem certeza de que deseja realizar a avaliação agora? Só é possível acessá-la UMA ÚNICA VEZ. Após aberta, ela deverá ser realizada no tempo determinado.';
+                        }
+                        echo $this->ajax($data->name, 'exercise/reply/index/id/' . $data->id, 1, $confirm);
+                    ?>
+                </td>
+                <td><?php echo $this->date($data->begin)?></td>
+                <td>
+                    <?php if (isset($data->end) && $data->end): ?>
+                        <?php echo $this->date($data->end) ?>
+                    <?php else: ?>
+                        ---
+                    <?php endif;?>
+                </td>
+                <td>
+                    <?php
+                        if ($data->attempts) {
+                            echo $data->attempts;
+                        } else {
+                            echo $this->translate('Free');
+                        }
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                        if ($data->time) {
+                            echo $data->time . ' ' . $this->translate(array('minute', 'minutes', $data->time));
+                        } else {
+                            echo $this->translate('Free');
+                        }
+                    ?>
+                </td>
+				<?php if($this->isAllowed("form")): ?>
+					<td><?php echo $this->ajax("edit", 'exercise/index/form/id/' . $data->id, 2);?></td>
+				<?php endif;?>
+			</tr>
+		<?php endforeach;?>
+	</table>
+<?php else:?>
+	<?=$this->translate( "there are no records" );?>
+<?php endif;?>
+<script type="text/javascript">
+    $('input[type=button], input[type=submit]').button();
+</script>

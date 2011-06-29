@@ -1,0 +1,29 @@
+<h3><?php echo $this->translate('Select a type')?>:</h3>
+<div id="question-type">
+    <div>
+        <?php echo $this->translate('Multichoice')?><br />
+        <a href="exercise/question/form/type/multi-choice">
+            <img src="static/img/type/plugins/name/exercise/file/multichoice.png" />
+        </a>
+    </div>
+
+    <div>
+        <?php echo $this->translate('Multiselect')?><br />
+        <a href="exercise/question/form/type/multi-select">
+            <img src="static/img/type/plugins/name/exercise/file/multiselect.png" />
+        </a>
+    </div>
+
+    <div>
+        <?php echo $this->translate('True or false')?><br />
+        <a href="exercise/question/form/type/true-false">
+            <img src="static/img/type/plugins/name/exercise/file/true-false.png" />
+        </a>
+    </div>
+</div>
+<script>
+    $('#question-type a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+</script>

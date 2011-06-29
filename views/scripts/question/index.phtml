@@ -1,0 +1,45 @@
+<div class="right">
+    <?php 
+        if ($this->isAllowed('form')) {
+           echo $this->ajax('new', 'exercise/question/form', 2);
+        }
+    ?>
+</div>
+<br /><br />
+<?php if(count($this->data)):?>
+	<table class="datatable">
+		<tr>
+			<th width="250"><?php echo $this->translate("Description")?></th>
+            <th><?php echo $this->translate("Type")?></th>
+            <th><?php echo $this->translate("Status")?></th>
+			<?php if($this->isAllowed("form")): ?>
+				<th></th>
+			<?php endif;?>
+		</tr>
+		<?php foreach($this->data as $data):?>
+			<tr>
+                <td><?php echo $data->description?></td>
+                <td><?php echo $this->translate($data->type)?></td>
+                <td><?php echo $this->translate($data->status)?></td>
+                <td>
+                    <?php if($this->isAllowed("form")): ?>
+                        <?php echo $this->ajax("edit", 'exercise/question/form/id/' . $data->id, 2);?>
+                    <?php endif;?>
+                </td>
+			</tr>
+		<?php endforeach;?>
+	</table>
+    <div id="question-page">
+        <?php echo $this->paginationControl($this->data) ?>
+    </div>
+<?php else:?>
+	<?php echo $this->translate( "there are no records" );?>
+<?php endif;?>
+<script type="text/javascript">
+    $('#question-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+
+    $('input[type=button], input[type=submit]').button();
+</script>

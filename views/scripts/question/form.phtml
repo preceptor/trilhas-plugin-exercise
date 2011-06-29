@@ -1,0 +1,48 @@
+<div class="exercise-question">
+    <div class="right">
+        <?php echo $this->ajax('back', 'exercise/question', 2) ?>
+    </div>
+    <?php echo $this->form?>
+</div>
+<script type="text/javascript">
+	$(".exercise-question form").submit(function() {
+        var $this = $(this);
+		$.post(this.action, $this.serialize(), function(data) {
+            $this.parents('.content').html(data);
+        });
+        return false;
+	});
+    $('.date').datepicker();
+
+    $('input[type=button], input[type=submit]').button();
+
+    var $a = $('<a href="">');
+    $a.text('<?php echo $this->translate('add option')?>');
+    $a.click(function(){
+        var $this = $(this),
+            $div = $this.prev().prev(),
+            $newDiv = $div.clone(),
+            $right = $newDiv.find('input[name=right_option]'),
+            $id = $newDiv.find('input[type=hidden]'),
+            $area = $newDiv.find('textarea');
+
+        $area.empty();
+        $id.val('');
+        
+        if (!$right.length) {
+            var $radios = $newDiv.find("input[type=radio]"),
+                total = $div.parent().children('div').length;
+                $radios.each(function(){
+                    this.name = "right_option["+total+"]";
+                });
+        } 
+        
+        $this.prev().before('<br />')
+                    .before($newDiv);
+        return false;
+    });
+    
+    $('#option-element').append('<br />')
+                        .append($a)
+                        .append('<br /><br />');
+</script>
