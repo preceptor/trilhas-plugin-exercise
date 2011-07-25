@@ -1,5 +1,8 @@
-<div class="right">
+<div class="aright">
     <?php
+        if($this->isAllowed(array('module' => 'exercise', 'controller' => 'correction', 'action' => 'index'))) {
+           echo $this->ajax('correction', 'exercise/correction/index', 2);
+        }
         if($this->isAllowed(array('module' => 'exercise', 'controller' => 'question', 'action' => 'index'))) {
            echo $this->ajax('question bank', 'exercise/question/index', 2);
         }
@@ -8,7 +11,7 @@
         }
     ?>
 </div>
-<br /><br />
+<br />
 <?php if(count($this->data)):?>
 	<table class="datatable">
 		<tr>
@@ -65,7 +68,7 @@
 		<?php endforeach;?>
 	</table>
 <?php else:?>
-	<?=$this->translate( "there are no records" );?>
+	<?php echo $this->translate( "there are no records" );?>
 <?php endif;?>
 <script type="text/javascript">
     $('input[type=button], input[type=submit]').button();

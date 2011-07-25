@@ -182,5 +182,5 @@ class Exercise_Form_Question extends Zend_Form
         }
         
         $this->addElement($multiple);
-   }
+    }
 }

@@ -13,30 +13,34 @@
         <ol>
             <?php foreach($this->questions as $question):?>
                 <?php $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id))?>
-                <?php if (count($options)): ?>
                         <li>
                             <?php echo $question->description?>
-                            <ul>
-                                <?php foreach($options as $key => $option):?>
-                                    <li>
-                                        <?php if($question->type == "multi-choice"):?>
-                                            <input name="option[<?php echo $option->exercise_question_id?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
-                                        <?php elseif($question->type == "multi-select"):?>
-                                            <input name="option[<?php echo $option->exercise_question_id?>][]" id="option_<?php echo $option->id?>" type="checkbox" value="<?php echo $option->id?>" />
-                                        <?php elseif($question->type == "true-false"):?>
-                                            <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
-                                            <?php echo $this->translate('exercise-T')?> 
-                                            <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" type="radio" value="false" />
-                                            <?php echo $this->translate('exercise-F')?> - 
-                                        <?php endif;?>
-                                        <label for="option_<?php echo $option->id?>">
-                                            <?php echo $option->description?>
-                                        </label>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                            <?php echo $this->formHidden('type['.$question->id.']', $question->type); ?>
+                            <?php if (count($options)): ?>
+                                <ul>
+                                    <?php foreach($options as $key => $option):?>
+                                        <li>
+                                            <?php if($question->type == "multi-choice"):?>
+                                                <input name="option[<?php echo $option->exercise_question_id?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
+                                            <?php elseif($question->type == "multi-select"):?>
+                                                <input name="option[<?php echo $option->exercise_question_id?>][]" id="option_<?php echo $option->id?>" type="checkbox" value="<?php echo $option->id?>" />
+                                            <?php elseif($question->type == "true-false"):?>
+                                                <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" id="option_<?php echo $option->id?>" type="radio" value="<?php echo $option->id?>" />
+                                                <?php echo $this->translate('exercise-T')?> 
+                                                <input name="option[<?php echo $option->exercise_question_id?>][<?php echo $key?>]" type="radio" value="false" />
+                                                <?php echo $this->translate('exercise-F')?> - 
+                                            <?php endif;?>
+                                            <label for="option_<?php echo $option->id?>">
+                                                <?php echo $option->description?>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else:?>
+                                <br />
+                                <?php echo $this->formTextarea('option['.$question->id.']', null,  array('cols' => 60, 'rows' => 7)); ?>
+                            <?php endif; ?>
                         </li>
-                <?php endif; ?>
             <?php endforeach; ?>
         </ol>
 

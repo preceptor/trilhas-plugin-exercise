@@ -1,0 +1,36 @@
+<div class="aright">
+    <?php echo $this->ajax('back', 'exercise/index', 2) ?>
+</div>
+<?php if(count($this->data)):?>
+	<table class="datatable">
+		<tr>
+			<th><?php echo $this->translate("User")?></th>
+            <th><?php echo $this->translate("Exercise")?></th>
+            <th></th>
+		</tr>
+		<?php foreach($this->data as $data):?>
+			<tr>
+                <td><?php echo $data->name?></td>
+                <td><?php echo $data->ename?></td>
+                <td>
+                    <?php if($this->isAllowed("view")): ?>
+                        <?php echo $this->ajax("view", 'exercise/correction/view/id/' . $data->id, 2);?>
+                    <?php endif;?>
+                </td>
+			</tr>
+		<?php endforeach;?>
+	</table>
+    <div id="correction-page">
+        <?php echo $this->paginationControl($this->data) ?>
+    </div>
+<?php else:?>
+	<?php echo $this->translate( "there are no records" );?>
+<?php endif;?>
+<script type="text/javascript">
+    $('#correction-page a').click(function(){
+        $(this).parents('.content').load(this.href);
+        return false;
+    });
+
+    $('input[type=button], input[type=submit]').button();
+</script>

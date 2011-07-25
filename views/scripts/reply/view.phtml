@@ -12,11 +12,26 @@
     <?php if (count($this->questions)): ?>
         <ol>
             <?php foreach($this->questions as $question):?>
-                <?php $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id))?>
-                <?php if (count($options)): ?>
-                        <li>
-                            <?php echo $question->description?> |
-                            <strong><?php echo $this->translate('value')?>: <?php echo $question->note?></strong>
+                <li>
+                    <?php echo $question->description?> |
+                    <strong><?php echo $this->translate('value')?>: <?php echo $question->note?></strong>
+                    <?php if ($question->type == 'text'):?>
+                        <p>
+                            <?php
+                                foreach($this->texts as $text) {
+                                    if ($text->exercise_question_id == $question->id) {
+                                        echo "<p>" . $text->value . "</p>";
+                                        echo "<strong>" . $this->translate('Comment') .":</strong><br />";
+                                        echo $text->comment;
+                                        break;
+                                    }
+                                }
+                            ?>
+                        </p>
+                    <?php else: ?>
+                        <?php $optionTable = new Tri_Db_Table('exercise_option');
+                              $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id)); ?>
+                        <?php if (count($options)): ?>
                             <ul>
                                 <?php foreach($options as $option):?>
                                     <?php
@@ -33,8 +48,9 @@
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
-                        </li>
-                <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </li>
             <?php endforeach; ?>
         </ol>
         <p><strong><?php echo $this->translate('Note')?>: <?php echo $this->note->note?></strong></p>
@@ -42,11 +58,18 @@
 
      <?php if (count($this->notes)): ?>
         <h3><?php echo $this->translate('previous')?></h3>
-        <ul>
+        <table class="datatable">
+            <tr>
+                <th><?php echo $this->translate('ID')?></th>
+                <th><?php echo $this->translate('Date')?></th>
+            </tr>
             <?php foreach($this->notes as $note):?>
-                <li><?php echo $this->ajax($this->date($note->created, true), 'exercise/reply/view/id/'. $note->id.'/userId/'.$this->userId)?></li>
+                <tr>
+                    <td><?php echo $note->id;?></td>
+                    <td><?php echo $this->ajax($this->date($note->created, true), 'exercise/correction/view/id/'. $note->id.'/userId/'.$this->userId)?></td>
+                </tr>
             <?php endforeach; ?>
-        </ul>
+        </table>
     <?php endif; ?>
 </div>
 <?php endif;?>

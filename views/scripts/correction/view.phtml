@@ -1,0 +1,82 @@
+<div class="reply">
+    <?php if (count($this->questions)): ?>
+        <form action="exercise/correction/save">
+            <h3><?php echo $this->exercise->name?></h3>
+            <ol>
+                <?php foreach($this->questions as $question):?>
+                    <li>
+                        <?php echo $question->description?> |
+                        <strong><?php echo $this->translate('value')?>: <?php echo $question->note?></strong>
+                        <?php if ($question->type == 'text'):?>
+                            <p>
+                                <?php
+                                    foreach($this->texts as $text) {
+                                        if ($text->exercise_question_id == $question->id) {
+                                            echo $text->value;
+                                            break;
+                                        }
+                                    }
+                                ?>
+                            </p>
+                            <br />
+                            <?php echo $this->translate('Comment')?>:<br />
+                            <?php echo $this->formTextarea('comment['.$question->id.']', null,  array('cols' => 60, 'rows' => 5)); ?>
+                        <?php else: ?>
+                            <?php $optionTable = new Tri_Db_Table('exercise_option');
+                                  $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id)); ?>
+                            <?php if (count($options)): ?>
+                                <ul>
+                                    <?php foreach($options as $option):?>
+                                        <?php
+                                            $className = null;
+                                            foreach($this->answers as $answer) {
+                                                if ($option->id == $answer->exercise_option_id) {
+                                                    $className = $option->status;
+                                                }
+                                            }
+                                        ?>
+                                        <li class="<?php echo $className?>">
+                                            &nbsp; <?php echo $option->description?>
+                                            (<?php echo $this->translate($option->status)?>)
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+            <p><strong><?php echo $this->translate('Note')?>:</strong> 
+               <?php echo $this->formText('note', $this->note->note); ?></p>
+            <?php echo $this->formHidden('note_id', $this->note->id); ?>
+            <?php echo $this->formSubmit('save', $this->translate('Save')); ?>
+        </form>
+        <script type="text/javascript">
+            $(".reply form").submit(function() {
+                var $this = $(this);
+                $.post(this.action, $this.serialize(), function(data) {
+                    $this.parents('.content').html(data);
+                });
+                return false;
+            });
+        </script>
+    <?php else:?>
+        <p><?php echo $this->translate('there are no records')?></p>
+    <?php endif; ?>
+
+     <?php if (count($this->notes)): ?>
+        <h3><?php echo $this->translate('previous')?></h3>
+        <table class="datatable">
+            <tr>
+                <th><?php echo $this->translate('ID')?></th>
+                <th><?php echo $this->translate('Date')?></th>
+            </tr>
+            <?php foreach($this->notes as $note):?>
+                <tr>
+                    <td><?php echo $note->id;?></td>
+                    <td><?php echo $this->ajax($this->date($note->created, true), 'exercise/correction/view/id/'. $note->id.'/userId/'.$this->userId)?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endif; ?>
+</div>

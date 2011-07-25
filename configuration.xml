@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <name>Exercise</name>
+    <description>Multi-type exercise builder</description>
+    <author>Preceptor Educação a Distância</author>
+    <version>1.0</version>
+    <license>GPL 3</license>
+    <keywords>exercise, question, quiz</keywords>
+    <url>http://www.preceptoread.com.br</url>
+    
+    <files>
+        <sql>
+            <install>data/sql/install.sql</install>
+            <uninstall>data/sql/uninstall.sql</uninstall>
+        </sql>
+        <languages>
+            <language name="pt_BR">data/language/pt_BR/exercise.csv</language>
+        </languages>
+    </files>
+    
+    <menus>
+        <menu type="tri_classroom_menu">
+            <item group="evaluation" resource="exercise/index/index">exercise</item>    
+        </menu>
+    </menus>
+    
+    <access>
+        <resource role="identified">exercise/index/index</resource>
+        <resource role="teacher">exercise/index/save</resource>
+        <resource role="teacher">exercise/index/form</resource>
+        <resource role="identified">exercise/index/view</resource>
+        <resource role="identified">exercise/reply/index</resource>
+        <resource role="identified">exercise/reply/save</resource>
+        <resource role="identified">exercise/reply/view</resource>
+        <resource role="teacher">exercise/question/index</resource>
+        <resource role="teacher">exercise/question/form</resource>
+        <resource role="teacher">exercise/question/save</resource>
+        <resource role="teacher">exercise/question/select</resource>
+        <resource role="teacher">exercise/correction/index</resource>
+        <resource role="teacher">exercise/correction/save</resource>
+        <resource role="teacher">exercise/correction/view</resource>
+    </access>
+</configuration>
