@@ -20,27 +20,34 @@ class Exercise_QuestionController extends Tri_Controller_Action
 
     public function formAction()
     {
-        $id   = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
-        $type = $this->_getParam('type');
-        $form = new Exercise_Form_Question();
+        $id       = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
+        $redirect = $this->_getParam('redirect');
+        $type     = $this->_getParam('type');
 
+        $this->view->redirect = $redirect;
+        
+        
+        $form  = new Exercise_Form_Question();
+        $data = array('redirect' => $redirect);
+        
         if ($id) {
             $table = new Tri_Db_Table('exercise_question');
             $row   = $table->find($id)->current();
             $type  = $row->type;
 
             if ($row) {
-                $form->addByType($type, $id);
-                $form->populate($row->toArray());
+                $data = $row->toArray();
             }
+            
             $this->view->update = $this->_getParam('update');
-        } else {
-            $form->addByType($type, $id);
         }
         
         if (!$type) {
             $this->render('type');
-        } 
+        }
+        
+        $form->addByType($type, $id);
+        $form->populate($data);
         
         $this->view->form = $form;
     }
@@ -50,7 +57,6 @@ class Exercise_QuestionController extends Tri_Controller_Action
         $form    = new Exercise_Form_Question();
         $table   = new Tri_Db_Table('exercise_question');
         $option  = new Tri_Db_Table('exercise_option');
-        $session = new Zend_Session_Namespace('data');
         $allData = $this->_getAllParams();
 
         $form->addByType($allData['type']);
@@ -63,9 +69,6 @@ class Exercise_QuestionController extends Tri_Controller_Action
                 $id = $row->save();
             } else {
                 unset($data['id']);
-                if (isset($session->exercise_id) && $session->exercise_id) {
-                    $exerciseId = $data['exercise_id'] = $session->exercise_id;
-                }
                 $row = $table->createRow($data);
                 $id = $row->save();
             }
@@ -105,7 +108,10 @@ class Exercise_QuestionController extends Tri_Controller_Action
             }
 
             $this->_helper->_flashMessenger->addMessage('Success');
-            $this->_redirect('exercise/question/index/id/'. $exerciseId);
+            if ($allData['redirect'] && $allData['redirect'] == 'add') {
+                $this->_redirect('exercise/question/select/');
+            }
+            $this->_redirect('exercise/question/index/');
         }
 
         $this->view->messages = array('Error');

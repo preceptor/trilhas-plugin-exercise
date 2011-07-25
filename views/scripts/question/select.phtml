@@ -1,3 +1,10 @@
+<div class="aright">
+    <?php 
+        if ($this->isAllowed('form')) {
+           echo $this->ajax('new', 'exercise/question/form/redirect/add', 2);
+        }
+    ?>
+</div>
 <?php if(count($this->data)):?>
 	<table class="datatable">
 		<tr>

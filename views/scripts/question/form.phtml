@@ -1,6 +1,12 @@
 <div class="exercise-question">
-    <div class="right">
-        <?php echo $this->ajax('back', 'exercise/question', 2) ?>
+    <div class="aright">
+        <?php 
+            if ($this->redirect == 'add') {
+                echo $this->ajax('back', 'exercise/question/select', 2);
+            } else {
+                echo $this->ajax('back', 'exercise/question', 2);
+            }
+        ?>
     </div>
     <?php echo $this->form?>
 </div>

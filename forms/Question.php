@@ -43,6 +43,10 @@ class Exercise_Form_Question extends Zend_Form
            ->addFilters($filters['id'])
            ->removeDecorator('Label')
            ->removeDecorator('HtmlTag');
+        
+        $redirect = new Zend_Form_Element_Hidden('redirect');
+        $redirect->removeDecorator('Label')
+                 ->removeDecorator('HtmlTag');
 
         $filters['description'][] = 'StripTags';
         $description = new Zend_Form_Element_Textarea('description');
@@ -53,6 +57,7 @@ class Exercise_Form_Question extends Zend_Form
                     ->setAllowEmpty(false);
 
         $this->addElement($id)
+             ->addElement($redirect)
              ->addElement($description);
     }
 
