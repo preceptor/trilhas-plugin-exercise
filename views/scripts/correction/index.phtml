@@ -12,9 +12,9 @@
 			<tr>
                 <td><?php echo $data->name?></td>
                 <td><?php echo $data->ename?></td>
-                <td>
+                <td width="80">
                     <?php if($this->isAllowed("view")): ?>
-                        <?php echo $this->ajax("view", 'exercise/correction/view/id/' . $data->id, 2);?>
+                        <?php echo $this->ajax("View", 'exercise/correction/view/id/' . $data->id, 2);?>
                     <?php endif;?>
                 </td>
 			</tr>

@@ -74,7 +74,7 @@
             <?php foreach($this->notes as $note):?>
                 <tr>
                     <td><?php echo $note->id;?></td>
-                    <td><?php echo $this->ajax($this->date($note->created, true), 'exercise/correction/view/id/'. $note->id.'/userId/'.$this->userId)?></td>
+                    <td><?php echo $this->ajax($this->date($note->created, true), 'exercise/correction/view/id/'. $note->id)?></td>
                 </tr>
             <?php endforeach; ?>
         </table>

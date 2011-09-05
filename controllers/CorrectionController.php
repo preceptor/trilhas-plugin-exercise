@@ -52,7 +52,6 @@ class Exercise_CorrectionController extends Tri_Controller_Action
                                        'id <> ?' => $note->id,
                                        'user_id = ?' => $note->user_id);
                     $this->view->notes  = $exerciseNote->fetchAll($whereNote, 'id DESC');
-                    $this->view->userId = $note->user_id;
                 }
             } 
         }

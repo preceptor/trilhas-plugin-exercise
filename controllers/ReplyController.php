@@ -109,6 +109,7 @@ class Exercise_ReplyController extends Tri_Controller_Action
         $id               = Zend_Filter::filterStatic($this->_getParam('id'), 'int');
         $exerciseId       = Zend_Filter::filterStatic($this->_getParam('exerciseId'), 'int');
         $userId           = Zend_Filter::filterStatic($this->_getParam('userId', $identity->id), 'int');
+        $layout           = $this->_getParam('layout');
         $exercise         = new Tri_Db_Table('exercise');
         $exerciseRelation = new Tri_Db_Table('exercise_relation');
         $exerciseNote     = new Tri_Db_Table('exercise_note');
@@ -141,12 +142,11 @@ class Exercise_ReplyController extends Tri_Controller_Action
 
                         $whereNote = array('exercise_id = ?' => $note->exercise_id,
                                            'id <> ?' => $note->id,
-                                           'user_id = ?' => $userId);
+                                           'user_id = ?' => $note->user_id);
                         $this->view->notes = $exerciseNote->fetchAll($whereNote, 'id DESC');
-                        $this->view->userId = $userId;
                     } elseif($note->status == 'waiting') {
                         if ($identity->role != 'student') {
-                            $this->_redirect('exercise/correction/view/layout/box/id/' . $note->id);
+                            $this->_redirect('exercise/correction/view/id/' . $note->id . '/layout/' . $layout);
                         }
                         $this->view->message = 'Waiting for correction';
                     }

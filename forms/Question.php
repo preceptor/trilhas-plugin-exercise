@@ -93,7 +93,7 @@ class Exercise_Form_Question extends Zend_Form
         $validators    = $table->getValidators();
         $filters       = $table->getFilters();
 
-        $multiple = new Exercise_Form_Element_MultiChoice('option');
+        $multiple = new Exercise_Form_Element_Multichoice('option');
         $multiple->setLabel('Options')
                  ->setAttrib('cols', 60)
                  ->setAttrib('rows', 4);
@@ -127,7 +127,7 @@ class Exercise_Form_Question extends Zend_Form
         $validators    = $table->getValidators();
         $filters       = $table->getFilters();
 
-        $multiple = new Exercise_Form_Element_MultiSelect('option');
+        $multiple = new Exercise_Form_Element_Multiselect('option');
         $multiple->setLabel('Options')
                  ->setAttrib('cols', 60)
                  ->setAttrib('rows', 4);
@@ -161,7 +161,7 @@ class Exercise_Form_Question extends Zend_Form
         $validators    = $table->getValidators();
         $filters       = $table->getFilters();
 
-        $multiple = new Exercise_Form_Element_TrueFalse('option');
+        $multiple = new Exercise_Form_Element_Truefalse('option');
         $multiple->setLabel('Options')
                  ->setAttrib('cols', 60)
                  ->setAttrib('rows', 4);
