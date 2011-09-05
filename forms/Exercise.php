@@ -60,6 +60,11 @@ class Exercise_Form_Exercise extends Zend_Form
         $attempts->setLabel('Attempts')
                  ->addValidators($validators['attempts'])
                  ->addFilters($filters['attempts']);
+        
+        $random = new Zend_Form_Element_Text('random');
+        $random->setLabel('Random')
+                 ->addValidators($validators['random'])
+                 ->addFilters($filters['random']);
 
         $status = new Zend_Form_Element_Select('status');
         $status->addMultiOptions($statusOptions)
@@ -89,6 +94,7 @@ class Exercise_Form_Exercise extends Zend_Form
              ->addElement($end)
              ->addElement($time)
              ->addElement($attempts)
+             ->addElement($random)
              ->addElement($status)
              ->addElement('submit', 'Save');
    }
