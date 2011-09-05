@@ -39,8 +39,10 @@ class Exercise_CorrectionController extends Tri_Controller_Action
                     $select = $exerciseRelation->select(true)
                                                ->setIntegrityCheck(false)
                                                ->join('exercise_question', 'exercise_question.id = exercise_question_id')
+                                               ->join('exercise_option', 'exercise_option.exercise_question_id = exercise_question.id', array())
+                                               ->join('exercise_answer', 'exercise_answer.exercise_option_id = exercise_option.id', array())
                                                ->where('exercise_id = ?', $row->id)
-                                               ->where('status = ?', 'active')
+                                               ->where('exercise_question.status = ?', 'active')
                                                ->order('position');
                     $this->view->questions = $exerciseRelation->fetchAll($select);
                     $this->view->exercise  = $row;
