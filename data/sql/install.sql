@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   `begin` date NOT NULL,
   `end` date DEFAULT NULL,
   `attempts` bigint(20) NOT NULL DEFAULT '2',
+  `random` bigint(20) NOT NULL DEFAULT '0',
   `status` enum('active','inactive','final') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
