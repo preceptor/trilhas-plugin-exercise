@@ -32,16 +32,16 @@ class Exercise_CorrectionController extends Tri_Controller_Action
         if ($id) {
             $note = $exerciseNote->fetchRow(array('id = ?' => $id));
 
-            if ($note && $note->status == 'waiting') {
+            if ($note) {
                 $row = $exercise->fetchRow(array('id = ?' => $note->exercise_id));
 
                 if ($row) {
                     $select = $exerciseRelation->select(true)
                                                ->setIntegrityCheck(false)
-                                               ->join('exercise_question', 'exercise_question.id = exercise_question_id')
-                                               ->join('exercise_option', 'exercise_option.exercise_question_id = exercise_question.id', array())
-                                               ->join('exercise_answer', 'exercise_answer.exercise_option_id = exercise_option.id', array())
-                                               ->where('exercise_id = ?', $row->id)
+                                               ->join('exercise_question', 'exercise_question.id = exercise_relation.exercise_question_id')
+                                               ->join('exercise_note_question', 'exercise_note_question.exercise_question_id = exercise_question.id',array())
+                                               ->where('exercise_relation.exercise_id = ?', $row->id)
+                                               ->where('exercise_note_question.exercise_note_id = ?', $note->id)
                                                ->where('exercise_question.status = ?', 'active')
                                                ->order('position');
                     $this->view->questions = $exerciseRelation->fetchAll($select);

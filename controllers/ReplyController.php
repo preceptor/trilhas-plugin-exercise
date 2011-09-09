@@ -21,8 +21,9 @@ class Exercise_ReplyController extends Tri_Controller_Action
         $exercise         = new Tri_Db_Table('exercise');
         $exerciseRelation = new Tri_Db_Table('exercise_relation');
         $exerciseNote     = new Tri_Db_Table('exercise_note');
+        $noteQuestion     = new Tri_Db_Table('exercise_note_question');
 
-        $exerciseNote->createRow(array('user_id' => $identity->id,
+        $noteId = $exerciseNote->createRow(array('user_id' => $identity->id,
                                        'exercise_id' => $id,
                                        'note' => 0))->save();
 
@@ -33,10 +34,20 @@ class Exercise_ReplyController extends Tri_Controller_Action
                                        ->setIntegrityCheck(false)
                                        ->join('exercise_question', 'exercise_question.id = exercise_question_id')
                                        ->where('exercise_id = ?', $row->id)
-                                       ->where('status = ?', 'active')
-                                       ->order('RAND()')
-                                       ->limit($row->random);
+                                       ->where('status = ?', 'active');
+            
+            if ($row->random) {
+                $select->order('RAND()')
+                       ->limit($row->random);
+            }
+            
             $this->view->questions = $exerciseRelation->fetchAll($select);
+            
+            foreach($this->view->questions as $question){
+                    $noteQuestion->createRow(array('exercise_question_id' => $question->id,
+                                                   'exercise_note_id' => $noteId))->save();
+            }
+            
             $this->view->exercise  = $row;
         } else {
             $this->_helper->_flashMessenger->addMessage('Error');
@@ -131,10 +142,10 @@ class Exercise_ReplyController extends Tri_Controller_Action
                     if ($note->status == 'end') {
                         $select = $exerciseRelation->select(true)
                                                ->setIntegrityCheck(false)
-                                               ->join('exercise_question', 'exercise_question.id = exercise_question_id')
-                                               ->join('exercise_option', 'exercise_option.exercise_question_id = exercise_question.id', array())
-                                               ->join('exercise_answer', 'exercise_answer.exercise_option_id = exercise_option.id', array())
-                                               ->where('exercise_id = ?', $row->id)
+                                               ->join('exercise_question', 'exercise_question.id = exercise_relation.exercise_question_id')
+                                               ->join('exercise_note_question', 'exercise_note_question.exercise_question_id = exercise_question.id',array())
+                                               ->where('exercise_relation.exercise_id = ?', $row->id)
+                                               ->where('exercise_note_question.exercise_note_id = ?', $note->id)
                                                ->where('exercise_question.status = ?', 'active')
                                                ->order('position');
                         $this->view->questions = $exerciseRelation->fetchAll($select);
