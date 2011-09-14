@@ -46,6 +46,14 @@ CREATE TABLE IF NOT EXISTS `exercise_note` (
   KEY `exercise_id` (`exercise_id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `exercise_note_question` (
+  `exercise_question_id` bigint(20) NOT NULL,
+  `exercise_note_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`exercise_question_id`,`exercise_note_id`),
+  KEY `exercise_note_id` (`exercise_note_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 CREATE TABLE IF NOT EXISTS `exercise_option` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `exercise_question_id` bigint(20) NOT NULL,
@@ -84,6 +92,10 @@ ALTER TABLE `exercise_answer`
 ALTER TABLE `exercise_answer_text`
   ADD CONSTRAINT `exercise_answer_text_ibfk_1` FOREIGN KEY (`exercise_question_id`) REFERENCES `exercise_question` (`id`),
   ADD CONSTRAINT `exercise_answer_text_ibfk_2` FOREIGN KEY (`exercise_note_id`) REFERENCES `exercise_note` (`id`);
+
+ALTER TABLE `exercise_note_question`
+  ADD CONSTRAINT `exercise_note_question_ibfk_1` FOREIGN KEY (`exercise_question_id`) REFERENCES `exercise_question` (`id`),
+  ADD CONSTRAINT `exercise_note_question_ibfk_2` FOREIGN KEY (`exercise_note_id`) REFERENCES `exercise_note` (`id`);
 
 ALTER TABLE `exercise_option`
   ADD CONSTRAINT `exercise_option_ibfk_1` FOREIGN KEY (`exercise_question_id`) REFERENCES `exercise_question` (`id`);
