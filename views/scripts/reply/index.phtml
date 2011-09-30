@@ -14,7 +14,7 @@
             <?php foreach($this->questions as $question):?>
                 <?php $options = $optionTable->fetchAll(array('exercise_question_id = ?' => $question->id))?>
                         <li>
-                            <?php echo $question->description?>
+                            <?php echo nl2br($question->description)?>
                             <?php echo $this->formHidden('type['.$question->id.']', $question->type); ?>
                             <?php if (count($options)): ?>
                                 <ul>

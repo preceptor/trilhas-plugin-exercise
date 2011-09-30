@@ -13,7 +13,7 @@
         <ol>
             <?php foreach($this->questions as $question):?>
                 <li>
-                    <?php echo $question->description?> |
+                    <?php echo nl2br($question->description)?> |
                     <strong><?php echo $this->translate('value')?>: <?php echo $question->note?></strong>
                     <?php if ($question->type == 'text'):?>
                         <p>
