@@ -6,7 +6,7 @@
     ?>
 </div>
 <?php if(count($this->data)):?>
-	<table class="datatable">
+	<table class="zebra-striped">
 		<tr>
 			<th width="400"><?php echo $this->translate("Description")?></th>
             <th><?php echo $this->translate("Type")?></th>
@@ -47,8 +47,8 @@
                  + '</div>';
         $('#question-list p').remove();
         $('#question-list h3').after(html);
-        $('input[type=button], input[type=submit]').button();
+        
     });
 
-    $('input[type=button], input[type=submit]').button();
+    
 </script>

@@ -13,7 +13,7 @@
 </div>
 <br />
 <?php if(count($this->data)):?>
-	<table class="datatable">
+	<table class="zebra-striped">
 		<tr>
 			<th width="250"><?php echo $this->translate("Title")?></th>
             <th><?php echo $this->translate("Begin")?></th>
@@ -71,5 +71,5 @@
 	<?php echo $this->translate( "there are no records" );?>
 <?php endif;?>
 <script type="text/javascript">
-    $('input[type=button], input[type=submit]').button();
+    
 </script>
