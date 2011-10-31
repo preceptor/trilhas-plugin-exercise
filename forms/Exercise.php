@@ -53,16 +53,19 @@ class Exercise_Form_Exercise extends Zend_Form
 
         $time = new Zend_Form_Element_Text('time');
         $time->setLabel('Time')
+              ->setAttrib('class', 'mini')
              ->addValidators($validators['time'])
              ->addFilters($filters['time']);
 
         $attempts = new Zend_Form_Element_Text('attempts');
         $attempts->setLabel('Attempts')
+                ->setAttrib('class', 'mini')
                  ->addValidators($validators['attempts'])
                  ->addFilters($filters['attempts']);
         
         $random = new Zend_Form_Element_Text('random');
         $random->setLabel('Random')
+                ->setAttrib('class', 'mini')
                  ->addValidators($validators['random'])
                  ->addFilters($filters['random']);
 
@@ -72,7 +75,7 @@ class Exercise_Form_Exercise extends Zend_Form
 
         $begin = new Zend_Form_Element_Text('begin');
         $begin->setLabel('Begin')
-              ->setAttrib('class', 'date')
+              ->setAttrib('class', 'date small')
               ->addFilters($filters['begin'])
               ->addValidators($validators['begin'])
               ->setAllowEmpty(false)
@@ -80,7 +83,7 @@ class Exercise_Form_Exercise extends Zend_Form
 
         $end = new Zend_Form_Element_Text('end');
         $end->setLabel('End')
-            ->setAttrib('class', 'date')
+            ->setAttrib('class', 'date small')
             ->addFilters($filters['end'])
             ->getPluginLoader('filter')->addPrefixPath('Tri_Filter', 'Tri/Filter');
 
@@ -96,6 +99,6 @@ class Exercise_Form_Exercise extends Zend_Form
              ->addElement($attempts)
              ->addElement($random)
              ->addElement($status)
-             ->addElement('submit', 'Save');
+             ->addElement('submit', 'Save', array('class' => 'btn primary'));
    }
 }
