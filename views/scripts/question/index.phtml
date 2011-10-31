@@ -1,9 +1,9 @@
 <div class="right">
     <?php 
         if ($this->isAllowed('form')) {
-           echo $this->ajax('new', 'exercise/question/form', 2);
+           echo $this->ajax('new', 'exercise/question/form', 3);
         }
-        echo $this->ajax('back', 'exercise/index', 2);
+        echo '&nbsp;' . $this->ajax('back', 'exercise/index', 2);
     ?>
 </div>
 <br /><br />

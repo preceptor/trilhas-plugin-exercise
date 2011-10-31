@@ -4,10 +4,10 @@
            echo $this->ajax('correction', 'exercise/correction/index', 2);
         }
         if($this->isAllowed(array('module' => 'exercise', 'controller' => 'question', 'action' => 'index'))) {
-           echo $this->ajax('question bank', 'exercise/question/index', 2);
+           echo '&nbsp;' . $this->ajax('question bank', 'exercise/question/index', 2);
         }
         if($this->isAllowed("form")) {
-           echo $this->ajax('new', 'exercise/index/form', 2);
+           echo '&nbsp;' . $this->ajax('new', 'exercise/index/form', 3);
         }
     ?>
 </div>
