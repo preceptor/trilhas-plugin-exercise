@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `exercise_option` (
 CREATE TABLE IF NOT EXISTS `exercise_question` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` text NOT NULL,
-  `type` enum('multi-choice','multi-select','true-false','text','value','text') NOT NULL,
+  `type` enum('multi-choice','multi-select','true-false','value','text') NOT NULL,
   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
